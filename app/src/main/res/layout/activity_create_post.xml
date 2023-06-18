@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreatePostActivity"
+    android:orientation="vertical"
+    android:background="#ECF4FF"
+    android:layout_gravity="center">
+    <androidx.appcompat.widget.Toolbar
+        android:background="@color/white"
+        android:id="@+id/toolbar_createpost"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+    <TextView
+        android:id="@+id/tv_title_newpost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="New Post"
+        android:background="@color/white"
+        android:textColor="@color/primary_text_color"
+        android:textSize="@dimen/toolbar_title_text_size"
+        android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Write a title for your post"
+            android:textColor="@color/black"
+            android:textAllCaps="false"
+            android:textSize="@dimen/btn_text_size"
+            />
+        <EditText
+            android:id="@+id/et_post_title"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:padding="10dp"
+            android:inputType="textMultiLine"
+            android:textColor="@color/black"
+            android:background="@drawable/titlebox_layout"/>
+        <TextView
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Write: "
+            android:textColor="@color/black"
+            android:textAllCaps="false"
+            android:textSize="@dimen/btn_text_size"
+            />
+        <EditText
+            android:layout_marginTop="12dp"
+            android:id="@+id/et_post_content"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:inputType="textMultiLine"
+            android:hint="Start writing your post here"
+            android:gravity="center_horizontal|start"
+            android:padding="10dp"
+            android:textColorHint="@color/hint_text"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:background="@drawable/titlebox_layout"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginTop="10dp"
+            android:textStyle="italic"
+            android:textColor="@color/hint_text"
+            android:text="I have worked for Byjus, Myntra, Phonepe and\n Flipkart"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_marginTop="80dp"
+            android:layout_width="240dp"
+            android:id="@+id/post"
+            android:layout_height="50dp"
+            android:text="Post"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:background="@drawable/sign_in_bg"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:elevation="5dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

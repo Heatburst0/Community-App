@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable-anydpi/ic_action_navigation_menu.xml" value="0.1715" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable-xxxhdpi/sign_in_bg.xml" value="0.1715" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable-xxxhdpi/white_btn.xml" value="0.1715" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/ic_black_color_back_24dp.xml" value="0.1915" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/ic_lock.xml" value="0.1915" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/ic_vector_add_24dp.xml" value="0.1715" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/logo_image_bg.xml" value="0.188" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/nav_header_main_background.xml" value="0.1715" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/sign_in_bg.xml" value="0.188" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/titlebox_layout.xml" value="0.1715" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/white_btn.xml" value="0.188" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/activity_create_post.xml" value="0.18568840579710144" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/activity_intro.xml" value="0.15307971014492755" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/activity_main.xml" value="0.18568840579710144" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/activity_profile.xml" value="0.18568840579710144" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/activity_sign_in.xml" value="0.18568840579710144" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/activity_sign_up.xml" value="0.15307971014492755" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/activity_splash.xml" value="0.15307971014492755" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/app_bar_main.xml" value="0.129981884057971" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/content_main.xml" value="0.18568840579710144" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/dialog_progress.xml" value="0.15307971014492755" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/item_post.xml" value="0.18568840579710144" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/nav_header_main.xml" value="0.18568840579710144" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/menu/activity_main_drawer.xml" value="0.21666666666666667" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
