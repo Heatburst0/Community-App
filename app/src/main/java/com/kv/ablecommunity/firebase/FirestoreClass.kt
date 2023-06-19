@@ -16,13 +16,9 @@ class FirestoreClass {
     fun registerUser(activity: SignUpActivity, userInfo: User) {
 
         mFireStore.collection(Constants.USERS)
-            // Document ID for users fields. Here the document it is the User ID.
             .document(getCurrentUserID())
-            // Here the userInfo are Field and the SetOption is set to merge. It is for if we wants to merge
             .set(userInfo, SetOptions.merge())
             .addOnSuccessListener {
-
-                // Here call a function of base activity for transferring the result to it.
                 activity.userRegisteredSuccess()
             }
             .addOnFailureListener { e ->
@@ -35,10 +31,7 @@ class FirestoreClass {
             }
     }
     fun getCurrentUserID(): String {
-        // An Instance of currentUser using FirebaseAuth
         val currentUser = FirebaseAuth.getInstance().currentUser
-
-        // A variable to assign the currentUserId if it is not null or else it will be blank.
         var currentUserID = ""
         if (currentUser != null) {
             currentUserID = currentUser.uid
@@ -47,19 +40,12 @@ class FirestoreClass {
         return currentUserID
     }
     fun loadUserData(activity: Activity) {
-
-        // Here we pass the collection name from which we wants the data.
         mFireStore.collection(Constants.USERS)
-            // The document id to get the Fields of user.
             .document(getCurrentUserID())
             .get()
             .addOnSuccessListener { document ->
                 Log.e(activity.javaClass.simpleName, document.toString())
-
-                // Here we have received the document snapshot which is converted into the User Data model object.
                 val loggedInUser = document.toObject(User::class.java)!!
-
-                // Here call a function of base activity for transferring the result to it.
 
                 when (activity) {
                     is SignInActivity -> {
@@ -74,7 +60,6 @@ class FirestoreClass {
                 }
             }
             .addOnFailureListener { e ->
-                // Here call a function of base activity for transferring the result to it.
                 when(activity){
                     is SignInActivity ->{
                         activity.hideProgressDialog()
@@ -91,16 +76,13 @@ class FirestoreClass {
             }
     }
     fun updateUserProfileData(activity: ProfileActivity, userHashMap: HashMap<String, Any>) {
-        mFireStore.collection(Constants.USERS) // Collection Name
-            .document(getCurrentUserID()) // Document ID
-            .update(userHashMap) // A hashmap of fields which are to be updated.
+        mFireStore.collection(Constants.USERS)
+            .document(getCurrentUserID())
+            .update(userHashMap)
             .addOnSuccessListener {
-                // Profile data is updated successfully.
                 Log.e(activity.javaClass.simpleName, "Profile Data updated successfully!")
 
                 Toast.makeText(activity, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-
-                // Notify the success result.
                 activity.profileUpdateSuccess()
             }
             .addOnFailureListener { e ->

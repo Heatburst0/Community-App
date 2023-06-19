@@ -50,9 +50,17 @@
                     android:layout_height="@dimen/my_profile_user_image_size"
                     android:contentDescription="@string/image_contentDescription"
                     android:src="@drawable/ic_user_place_holder" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Profile Picture"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="5dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     app:boxStrokeColor="@color/black"
                     android:layout_height="wrap_content"

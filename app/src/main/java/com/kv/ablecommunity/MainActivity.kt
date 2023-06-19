@@ -119,21 +119,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         mUserName = user.name
 
         val headerView = nav_view.getHeaderView(0)
-
-        // The instance of the user image of the navigation view.
         val navUserImage = headerView.findViewById<ImageView>(R.id.iv_user_image)
-
-        // Load the user image in the ImageView.
         Glide
             .with(this@MainActivity)
-            .load(user.image) // URL of the image
-            .centerCrop() // Scale type of the image.
-            .placeholder(R.drawable.ic_user_place_holder) // A default place holder
-            .into(navUserImage) // the view in which the image will be loaded.
-
-        // The instance of the user name TextView of the navigation view.
+            .load(user.image)
+            .centerCrop()
+            .placeholder(R.drawable.ic_user_place_holder)
+            .into(navUserImage)
         val navUsername = headerView.findViewById<TextView>(R.id.tv_username)
-        // Set the user name
         navUsername.text = user.name
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().loadPosts(this@MainActivity)
@@ -156,7 +149,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
     companion object {
-        //A unique code for starting the activity for result
         const val MY_PROFILE_REQUEST_CODE: Int = 11
         const val CREATE_POST_REQUEST_CODE: Int = 12
     }
