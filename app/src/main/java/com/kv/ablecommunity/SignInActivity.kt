@@ -80,9 +80,6 @@ class SignInActivity : BaseActivity() {
         }
     }
 
-    /**
-     * A function to get the user details from the firestore database after authentication.
-     */
     fun signInSuccess(user: User) {
 
         hideProgressDialog()

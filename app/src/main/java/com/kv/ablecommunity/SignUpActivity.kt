@@ -96,9 +96,7 @@ class SignUpActivity : BaseActivity() {
         }
     }
 
-    /**
-     * A function to validate the entries of a new user.
-     */
+
     private fun validateForm(name: String, email: String, password: String): Boolean {
         return when {
             TextUtils.isEmpty(name) -> {

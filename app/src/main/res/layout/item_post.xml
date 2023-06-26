@@ -75,12 +75,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
-        android:layout_marginStart="8dp">
+        android:layout_marginStart="8dp"
+        android:id="@+id/like_btn">
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_like"/>
         <TextView
+            android:id="@+id/like_no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Like"

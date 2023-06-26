@@ -129,5 +129,20 @@ class FirestoreClass {
                 Log.e(activity.javaClass.simpleName, "Error while loading posts.", e)
             }
     }
+    fun updatePosts(activity : MainActivity, post : Post){
+        val hm : HashMap<String,Any> = HashMap()
+        hm[Constants.POSTS] = post
+        mFireStore.collection(Constants.POSTS)
+            .document(post.documentId)
+            .update(hm)
+            .addOnSuccessListener {
+                Log.e(activity.javaClass.simpleName, "Post updated successfully.")
+                activity.postUpdateSuccess()
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
+                Toast.makeText(activity,"Failed to update post",Toast.LENGTH_SHORT).show()
+            }
+    }
 
 }

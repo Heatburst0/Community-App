@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -142,11 +143,32 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             rv_posts.setHasFixedSize(true)
             val adapter = PostAdapter(this@MainActivity,posts)
             rv_posts.adapter=adapter
+            adapter.setOnClickListener(object:
+            PostAdapter.OnClickListener{
+                override fun onClick(position: Int, post: Post) {
+                    val likedby = post.likedby
+                    var found : Boolean = false
+                    for(i in likedby.indices){
+                        if(likedby[i]==currentUser.id){
+                            Toast.makeText(this@MainActivity,"You have already liked this post",Toast.LENGTH_SHORT).show()
+                            found=true
+                        }
+                    }
+                    if(!found){
+
+                    }
+                }
+
+            })
 
         }else{
             rv_posts.visibility= View.GONE
             txt_noposts.visibility = View.VISIBLE
         }
+    }
+    fun postUpdateSuccess(){
+        hideProgressDialog()
+
     }
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11

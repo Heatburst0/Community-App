@@ -9,7 +9,10 @@ data class Post(
     val content : String="",
     val timestamp : String="",
     val users : ArrayList<User> = ArrayList(),
-    var documentId :String=""
+    var documentId :String="",
+    val likedby : ArrayList<String> = ArrayList(),
+    var likes : Int =0
+
 
 
 ) : Parcelable {
@@ -19,7 +22,9 @@ data class Post(
         source.readString()!!,
         source.readString()!!,
         source.createTypedArrayList(User.CREATOR)!!,
-        source.readString()!!
+        source.readString()!!,
+        source.createStringArrayList()!!,
+        source.readInt()
 
     )
 
@@ -32,6 +37,8 @@ data class Post(
         writeString(timestamp)
         writeTypedList(users)
         writeString(documentId)
+        writeStringList(likedby)
+        writeInt(likes)
 
     }
 
