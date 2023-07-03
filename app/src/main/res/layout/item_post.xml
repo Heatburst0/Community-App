@@ -17,6 +17,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
+        android:weightSum="3"
         >
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -29,7 +30,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginStart="10dp">
+            android:layout_weight="4"
+            android:layout_marginStart="10dp"
+            >
             <TextView
                 android:id="@+id/post_user_name"
                 android:layout_width="match_parent"
@@ -46,12 +49,20 @@
                 android:textSize="12sp"
                 android:textColor="@color/hint_text"/>
         </LinearLayout>
+        <ImageView
+            android:id="@+id/more_opt"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_more"
+
+            />
+
     </LinearLayout>
     <TextView
         android:id="@+id/post_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
         android:text="Title"
         android:textSize="18sp"
         android:layout_marginStart="8dp"
@@ -78,6 +89,7 @@
         android:layout_marginStart="8dp"
         android:id="@+id/like_btn">
         <ImageView
+            android:id="@+id/like_iv"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_like"/>

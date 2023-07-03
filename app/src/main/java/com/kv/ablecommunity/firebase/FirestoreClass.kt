@@ -131,7 +131,8 @@ class FirestoreClass {
     }
     fun updatePosts(activity : MainActivity, post : Post){
         val hm : HashMap<String,Any> = HashMap()
-        hm[Constants.POSTS] = post
+        hm[Constants.likedby] = post.likedby
+        hm[Constants.likes] = post.likes
         mFireStore.collection(Constants.POSTS)
             .document(post.documentId)
             .update(hm)
@@ -144,5 +145,15 @@ class FirestoreClass {
                 Toast.makeText(activity,"Failed to update post",Toast.LENGTH_SHORT).show()
             }
     }
+    fun removePost(activity : MainActivity, postid : String){
+        mFireStore.collection(Constants.POSTS)
+            .document(postid)
+            .delete()
+            .addOnSuccessListener {
+                activity.removePostSuccess()
+            }
+
+    }
+
 
 }

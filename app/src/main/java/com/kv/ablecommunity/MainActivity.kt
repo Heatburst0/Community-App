@@ -5,12 +5,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
+import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
@@ -23,10 +25,12 @@ import com.kv.ablecommunity.utils.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.item_post.*
+import kotlinx.android.synthetic.main.item_post.view.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var mUserName: String
+    lateinit var mUserName: String
     private lateinit var currentUser : User
     private lateinit var currentPosts : ArrayList<Post>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -145,18 +149,27 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             rv_posts.adapter=adapter
             adapter.setOnClickListener(object:
             PostAdapter.OnClickListener{
-                override fun onClick(position: Int, post: Post) {
+                override fun onClick(position: Int, post: Post,view : ImageView,view2 : TextView) {
                     val likedby = post.likedby
-                    var found : Boolean = false
+                    var found  = false
+                    var ind =-1
                     for(i in likedby.indices){
                         if(likedby[i]==currentUser.id){
-                            Toast.makeText(this@MainActivity,"You have already liked this post",Toast.LENGTH_SHORT).show()
+                            ind=i
                             found=true
                         }
                     }
                     if(!found){
-
+                        view.setImageDrawable(AppCompatResources.getDrawable(this@MainActivity,R.drawable.ic_like_blue))
+                        post.likes++
+                        post.likedby.add(currentUser.id)
+                    }else{
+                        view.setImageDrawable(AppCompatResources.getDrawable(this@MainActivity,R.drawable.ic_like))
+                        post.likes--
+                        post.likedby.removeAt(ind)
                     }
+                    view2.text = post.likes.toString()
+                    FirestoreClass().updatePosts(this@MainActivity,post)
                 }
 
             })
@@ -169,6 +182,38 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     fun postUpdateSuccess(){
         hideProgressDialog()
 
+    }
+
+
+    /** Context Menu Trial**/
+
+
+    fun postMenu(pos : Int,view : ImageView){
+        val popmenu = PopupMenu(this,view)
+        popmenu.inflate(R.menu.menu_post)
+        popmenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener{
+            override fun onMenuItemClick(item: MenuItem?): Boolean {
+                when(item?.itemId){
+
+                    R.id.delete_post_btn->{
+                        showProgressDialog(resources.getString(R.string.please_wait))
+                        FirestoreClass().removePost(this@MainActivity,currentPosts[pos].documentId)
+                    }
+                    R.id.edit_post->{
+                        Toast.makeText(this@MainActivity,"Clicked",Toast.LENGTH_SHORT).show()
+                    }
+                }
+                return true
+
+            }
+
+        })
+        popmenu.show()
+
+    }
+    fun removePostSuccess(){
+        hideProgressDialog()
+        Toast.makeText(this,"Post removed Successfully!!",Toast.LENGTH_SHORT).show()
     }
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11

@@ -10,6 +10,8 @@ object Constants {
     const val USERS: String = "users"
     const val POSTS : String ="posts"
     const val user_details : String ="user_details"
+    const val likedby : String ="likedby"
+    const val likes : String ="likes"
     fun getFileExtension(activity: Activity, uri: Uri?): String? {
         /*
          * MimeTypeMap: Two-way map that maps MIME-types to file extensions and vice versa.

@@ -4,9 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable-anydpi/ic_action_navigation_menu.xml" value="0.1715" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable-ldpi/ic_delete_new.xml" value="0.1715" />
         <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable-xxxhdpi/sign_in_bg.xml" value="0.1715" />
         <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable-xxxhdpi/white_btn.xml" value="0.1715" />
         <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/ic_black_color_back_24dp.xml" value="0.1915" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/ic_dlt.xml" value="0.1715" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/ic_like.xml" value="0.1715" />
         <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/ic_like_blue.xml" value="0.1715" />
         <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/ic_lock.xml" value="0.1915" />
         <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/drawable/ic_vector_add_24dp.xml" value="0.1715" />
@@ -28,6 +31,8 @@
         <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/item_post.xml" value="0.18568840579710144" />
         <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/layout/nav_header_main.xml" value="0.18568840579710144" />
         <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/menu/activity_main_drawer.xml" value="0.21666666666666667" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/menu/menu.xml" value="0.215625" />
+        <entry key="..\:/Users/krishna verma/AndroidStudioProjects/AbleCommunity/app/src/main/res/menu/menu_post.xml" value="0.215625" />
         <entry key="..\:/Users/krishna verma/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/auto_complete_list.xml" value="0.18568840579710144" />
       </map>
     </option>
