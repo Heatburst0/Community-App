@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.WindowManager
+import com.google.firebase.FirebaseApp
 import com.kv.ablecommunity.firebase.FirestoreClass
 
 class SplashActivity : AppCompatActivity() {
@@ -21,6 +22,7 @@ class SplashActivity : AppCompatActivity() {
             // we will redirect him to MainScreen or else to the Intro Screen as it was before.
 
             // Get the current user id
+
             val currentUserID = FirestoreClass().getCurrentUserID()
             // Start the Intro Activity
 
@@ -34,4 +36,5 @@ class SplashActivity : AppCompatActivity() {
             finish() // Call this when your activity is done and should be closed.
         }, 2000)
     }
+
 }

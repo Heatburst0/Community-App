@@ -1,14 +1,15 @@
 package com.kv.ablecommunity
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.dialog_progress.*
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -25,7 +26,7 @@ open class BaseActivity : AppCompatActivity() {
 
         mProgressDialog.setContentView(R.layout.dialog_progress)
 
-        mProgressDialog.tv_progress_text.text = text
+        mProgressDialog.findViewById<TextView>(R.id.tv_progress_text).text = text
         mProgressDialog.show()
     }
 
@@ -64,6 +65,9 @@ open class BaseActivity : AppCompatActivity() {
             )
         )
         snackBar.show()
+    }
+    fun launchToast(message : String,context : Context){
+        Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
     }
 
 }

@@ -12,7 +12,7 @@ import com.kv.ablecommunity.models.User
 import com.kv.ablecommunity.utils.Constants
 
 class FirestoreClass {
-    private val mFireStore = FirebaseFirestore.getInstance()
+    private val mFireStore by lazy { FirebaseFirestore.getInstance() }
     fun registerUser(activity: SignUpActivity, userInfo: User) {
 
         mFireStore.collection(Constants.USERS)

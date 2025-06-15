@@ -11,7 +11,8 @@ data class Post(
     val users : ArrayList<User> = ArrayList(),
     var documentId :String="",
     val likedby : ArrayList<String> = ArrayList(),
-    var likes : Int =0
+    var likes : Int =0,
+    var images : ArrayList<String> = ArrayList(),
 
 
 
@@ -24,7 +25,8 @@ data class Post(
         source.createTypedArrayList(User.CREATOR)!!,
         source.readString()!!,
         source.createStringArrayList()!!,
-        source.readInt()
+        source.readInt(),
+        source.createStringArrayList()!!
 
     )
 
@@ -39,6 +41,7 @@ data class Post(
         writeString(documentId)
         writeStringList(likedby)
         writeInt(likes)
+        writeStringList(images)
 
     }
 

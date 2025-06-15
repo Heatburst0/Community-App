@@ -14,10 +14,10 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.kv.ablecommunity.databinding.ActivityProfileBinding
 import com.kv.ablecommunity.firebase.FirestoreClass
 import com.kv.ablecommunity.models.User
 import com.kv.ablecommunity.utils.Constants
-import kotlinx.android.synthetic.main.activity_profile.*
 import java.io.IOException
 
 class ProfileActivity : BaseActivity() {
@@ -30,13 +30,15 @@ class ProfileActivity : BaseActivity() {
     // A global variable for a user profile image URL
     private var mProfileImageURL: String = ""
 
+    private lateinit var binding: ActivityProfileBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        binding = ActivityProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupActionBar()
         FirestoreClass().loadUserData(this@ProfileActivity)
 
-        iv_profile_user_image.setOnClickListener {
+        binding.ivProfileUserImage.setOnClickListener {
 
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED
@@ -53,7 +55,7 @@ class ProfileActivity : BaseActivity() {
                 )
             }
         }
-        btn_update_profile.setOnClickListener {
+        binding.btnUpdateProfile.setOnClickListener {
 
             // Here if the image is not selected then update the other details of user.
             if (mSelectedImageFileUri != null) {
@@ -70,7 +72,7 @@ class ProfileActivity : BaseActivity() {
     }
     private fun setupActionBar() {
 
-        setSupportActionBar(toolbar_my_profile_activity)
+        setSupportActionBar(binding.toolbarMyProfileActivity)
 
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -79,7 +81,7 @@ class ProfileActivity : BaseActivity() {
             actionBar.title = "My Profile"
         }
 
-        toolbar_my_profile_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarMyProfileActivity.setNavigationOnClickListener { onBackPressed() }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -97,7 +99,7 @@ class ProfileActivity : BaseActivity() {
                     .load(Uri.parse(mSelectedImageFileUri.toString())) // URI of the image
                     .centerCrop() // Scale type of the image.
                     .placeholder(R.drawable.ic_user_place_holder) // A default place holder
-                    .into(iv_profile_user_image) // the view in which the image will be loaded.
+                    .into(binding.ivProfileUserImage) // the view in which the image will be loaded.
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -184,13 +186,13 @@ class ProfileActivity : BaseActivity() {
             userHashMap[Constants.IMAGE] = mProfileImageURL
         }
 
-        if (et_name_profile.text.toString() != mUserDetails.name) {
-            userHashMap[Constants.NAME] = et_name_profile.text.toString()
+        if (binding.etNameProfile.text.toString() != mUserDetails.name) {
+            userHashMap[Constants.NAME] = binding.etNameProfile.text.toString()
         }
 
-        if (et_phone.text.toString() != mUserDetails.mobile.toString()) {
-            if(et_phone.text.toString().isBlank()) et_phone.setText("0")
-            userHashMap[Constants.MOBILE] = et_phone.text.toString().toLong()
+        if (binding.etPhone.text.toString() != mUserDetails.mobile.toString()) {
+            if(binding.etPhone.text.toString().isBlank()) binding.etPhone.setText("0")
+            userHashMap[Constants.MOBILE] = binding.etPhone.text.toString().toLong()
         }
 
         // Update the data in the database.
@@ -206,12 +208,12 @@ class ProfileActivity : BaseActivity() {
             .load(user.image)
             .centerCrop()
             .placeholder(R.drawable.ic_user_place_holder)
-            .into(iv_profile_user_image)
+            .into(binding.ivProfileUserImage)
 
-        et_name_profile.setText(user.name)
-        et_email_profile.setText(user.email)
+        binding.etNameProfile.setText(user.name)
+        binding.etEmailProfile.setText(user.email)
         if (user.mobile != 0L) {
-            et_phone.setText(user.mobile.toString())
+            binding.etPhone.setText(user.mobile.toString())
         }
     }
     fun profileUpdateSuccess() {

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="110dp"
+    android:layout_height="110dp"
+    android:layout_margin="6dp"
+    android:radius="16dp"
+    android:elevation="6dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Full-size image preview -->
+        <ImageView
+            android:id="@+id/ivSelectedImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="Selected Image" />
+
+        <!-- Close icon (top-right corner) -->
+        <ImageView
+            android:id="@+id/cancelImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="6dp"
+            android:src="@drawable/ic_close"
+            android:background="@drawable/circle_white_background"
+            android:padding="4dp"
+            android:contentDescription="Remove Image" />
+
+        <!-- Image name at bottom with dark overlay -->
+        <TextView
+            android:id="@+id/imageName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:padding="4dp"
+            android:text="image_name.jpg"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:background="#80000000" />
+    </FrameLayout>
+</androidx.cardview.widget.CardView>

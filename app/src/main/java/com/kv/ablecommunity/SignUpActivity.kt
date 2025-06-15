@@ -9,28 +9,30 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.kv.ablecommunity.databinding.ActivitySignUpBinding
 import com.kv.ablecommunity.firebase.FirestoreClass
 import com.kv.ablecommunity.models.User
-import kotlinx.android.synthetic.main.activity_intro.*
-import kotlinx.android.synthetic.main.activity_sign_up.*
+
 
 class SignUpActivity : BaseActivity() {
+    private lateinit var binding: ActivitySignUpBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_up)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         setupActionBar()
-        signup_real.setOnClickListener {
+        binding.signupReal.setOnClickListener {
             registerUser()
         }
 
     }
     private fun setupActionBar() {
 
-        setSupportActionBar(toolbar_sign_up_activity)
+        setSupportActionBar(binding.toolbarSignUpActivity)
 
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -38,7 +40,7 @@ class SignUpActivity : BaseActivity() {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
         }
 
-        toolbar_sign_up_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarSignUpActivity.setNavigationOnClickListener { onBackPressed() }
     }
     fun userRegisteredSuccess(){
         Toast.makeText(
@@ -60,9 +62,9 @@ class SignUpActivity : BaseActivity() {
     }
     private fun registerUser() {
         // Here we get the text from editText and trim the space
-        val name: String = et_name.text.toString().trim { it <= ' ' }
-        val email: String = et_email.text.toString().trim { it <= ' ' }
-        val password: String = et_password.text.toString().trim { it <= ' ' }
+        val name: String = binding.etName.text.toString().trim { it <= ' ' }
+        val email: String = binding.etEmail.text.toString().trim { it <= ' ' }
+        val password: String = binding.etPassword.text.toString().trim { it <= ' ' }
 
         if (validateForm(name, email, password)) {
             // Show the progress dialog.

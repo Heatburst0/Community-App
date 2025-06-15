@@ -1,12 +1,16 @@
 package com.kv.ablecommunity.adapter
 
 import android.content.Context
+import android.graphics.Color
+import android.media.Image
+import android.net.Uri
 import android.text.format.DateUtils
 import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
@@ -16,8 +20,8 @@ import com.kv.ablecommunity.MainActivity
 import com.kv.ablecommunity.R
 import com.kv.ablecommunity.firebase.FirestoreClass
 import com.kv.ablecommunity.models.Post
-import kotlinx.android.synthetic.main.item_post.*
-import kotlinx.android.synthetic.main.item_post.view.*
+import de.hdodenhof.circleimageview.CircleImageView
+
 
 open class PostAdapter (private val context: Context,
     private var list: ArrayList<Post>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -43,30 +47,34 @@ open class PostAdapter (private val context: Context,
                 .load(creator.image)
                 .centerCrop()
                 .placeholder(R.drawable.ic_board_place_holder)
-                .into(holder.itemView.iv_user_image_post)
-            holder.itemView.post_user_name.text=creator.name
+                .into(holder.itemView.findViewById<CircleImageView>(R.id.iv_user_image_post))
+            holder.itemView.findViewById<TextView>(R.id.post_user_name).text=creator.name
 
             val likes = post.likes
             if(likes>0){
-                holder.itemView.like_no.text = likes.toString()
+                holder.itemView.findViewById<TextView>(R.id.like_no).text = likes.toString()
             }
-            holder.itemView.post_title.text=post.title
-            holder.itemView.post_content.text=post.content
+            holder.itemView.findViewById<TextView>(R.id.post_title).text=post.title
+            holder.itemView.findViewById<TextView>(R.id.post_content).text=post.content
             val time= DateUtils.getRelativeTimeSpanString(post.timestamp.toLong()).toString()
-            holder.itemView.timestamp_post.text=time
+            holder.itemView.findViewById<TextView>(R.id.timestamp_post).text=time
             if(creator.name!=(context as MainActivity).mUserName){
-                holder.itemView.more_opt.visibility = View.INVISIBLE
+                holder.itemView.findViewById<ImageView>(R.id.more_opt).visibility = View.INVISIBLE
             }
             if(post.likedby.contains(FirestoreClass().getCurrentUserID())){
-                holder.itemView.like_iv.setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.ic_like_blue))
+                holder.itemView.findViewById<ImageView>(R.id.like_iv).setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.ic_like_blue))
             }
-            holder.itemView.like_btn.setOnClickListener {
+            holder.itemView.findViewById<LinearLayout>(R.id.like_btn).setOnClickListener {
                 if (onClickListener != null) {
-                    onClickListener!!.onClick(position, post,holder.itemView.like_iv,holder.itemView.like_no)
+                    onClickListener!!.onClick(position, post,holder.itemView.findViewById<ImageView>(R.id.like_iv),holder.itemView.findViewById<TextView>(R.id.like_no))
                 }
             }
-            holder.itemView.more_opt.setOnClickListener {
-                (context as MainActivity).postMenu(position,holder.itemView.more_opt)
+            holder.itemView.findViewById<ImageView>(R.id.more_opt).setOnClickListener {
+                (context as MainActivity).postMenu(position,holder.itemView.findViewById<ImageView>(R.id.more_opt))
+            }
+            if(post.images.isNotEmpty()){
+                val imageUris = post.images.map { Uri.parse(it) }
+                bindImages(context,holder.itemView.findViewById<LinearLayout>(R.id.image_container),imageUris)
             }
         }
     }
@@ -91,5 +99,96 @@ open class PostAdapter (private val context: Context,
         }
 
 
+    }
+    private fun createImageView(context: Context, weight: Float = 0f): ImageView {
+        return ImageView(context).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                if (weight > 0f) 0 else ViewGroup.LayoutParams.MATCH_PARENT,
+                200.dp(context)
+            ).apply {
+                this.weight = weight
+                marginEnd = 6.dp(context)
+                topMargin = 6.dp(context)
+            }
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            setBackgroundColor(Color.LTGRAY) // Optional
+        }
+    }
+
+    private fun loadImage(uri: Uri, imageView: ImageView) {
+        Glide
+            .with(imageView.context)
+            .load(uri) // Local URI works!
+            .placeholder(R.drawable.ic_image_placeholder)
+            .into(imageView)
+    }
+
+    fun Int.dp(context: Context): Int =
+        (this * context.resources.displayMetrics.density).toInt()
+
+    private fun bindImages(context: Context, imageContainer: LinearLayout, imageUris: List<Uri>) {
+        imageContainer.removeAllViews()
+        imageContainer.visibility = View.VISIBLE
+
+        when (imageUris.size) {
+            1 -> {
+                val imageView = createImageView(context)
+                loadImage(imageUris[0], imageView)
+                imageContainer.addView(imageView)
+            }
+
+            2 -> {
+                val row = LinearLayout(context).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    layoutParams = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+                    weightSum = 2f
+                }
+
+                imageUris.forEach { uri ->
+                    val imageView = createImageView(context, weight = 1f)
+                    loadImage(uri, imageView)
+                    row.addView(imageView)
+                }
+
+                imageContainer.addView(row)
+            }
+
+            3 -> {
+                // First row with 2 images
+                val topRow = LinearLayout(context).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    layoutParams = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+                    weightSum = 2f
+                }
+
+                for (i in 0..1) {
+                    val imageView = createImageView(context, weight = 1f)
+                    loadImage(imageUris[i], imageView)
+                    topRow.addView(imageView)
+                }
+
+                // Second row with full-width image
+                val bottomRow = LinearLayout(context).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    layoutParams = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+                }
+
+                val fullWidthImage = createImageView(context)
+                loadImage(imageUris[2], fullWidthImage)
+                bottomRow.addView(fullWidthImage)
+
+                imageContainer.addView(topRow)
+                imageContainer.addView(bottomRow)
+            }
+        }
     }
 }

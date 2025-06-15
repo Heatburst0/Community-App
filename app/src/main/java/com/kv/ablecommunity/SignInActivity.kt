@@ -7,28 +7,31 @@ import android.text.TextUtils
 import android.view.WindowManager
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.kv.ablecommunity.databinding.ActivityMainBinding
+import com.kv.ablecommunity.databinding.ActivitySignInBinding
 import com.kv.ablecommunity.firebase.FirestoreClass
 import com.kv.ablecommunity.models.User
-import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class SignInActivity : BaseActivity() {
+    private lateinit var binding: ActivitySignInBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_in)
+        binding = ActivitySignInBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
         setupActionBar()
-        signin_real.setOnClickListener {
+        binding.signinReal.setOnClickListener {
             signInRegisteredUser()
         }
 
     }
     private fun setupActionBar() {
 
-        setSupportActionBar(toolbar_sign_in_activity)
+        setSupportActionBar(binding.toolbarSignInActivity)
 
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -36,12 +39,12 @@ class SignInActivity : BaseActivity() {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
         }
 
-        toolbar_sign_in_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarSignInActivity.setNavigationOnClickListener { onBackPressed() }
     }
     private fun signInRegisteredUser() {
         // Here we get the text from editText and trim the space
-        val email: String = et_email_signin.text.toString().trim { it <= ' ' }
-        val password: String = et_password_signin.text.toString().trim { it <= ' ' }
+        val email: String = binding.etEmailSignin.text.toString().trim { it <= ' ' }
+        val password: String = binding.etPasswordSignin.text.toString().trim { it <= ' ' }
 
         if (validateForm(email, password)) {
             // Show the progress dialog.

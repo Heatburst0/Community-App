@@ -18,32 +18,29 @@ import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.kv.ablecommunity.adapter.PostAdapter
+import com.kv.ablecommunity.databinding.ActivityMainBinding
 import com.kv.ablecommunity.firebase.FirestoreClass
 import com.kv.ablecommunity.models.Post
 import com.kv.ablecommunity.models.User
 import com.kv.ablecommunity.utils.Constants
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.item_post.*
-import kotlinx.android.synthetic.main.item_post.view.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var mUserName: String
     private lateinit var currentUser : User
     private lateinit var currentPosts : ArrayList<Post>
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupActionBar()
-
         // Assign the NavigationView.OnNavigationItemSelectedListener to navigation view.
-        nav_view.setNavigationItemSelectedListener(this)
+        binding.navView.setNavigationItemSelectedListener(this)
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().loadUserData(this@MainActivity)
-        create_post.setOnClickListener {
+        binding.appBarMain.createPost.setOnClickListener {
             val intent = Intent(this@MainActivity,CreatePostActivity::class.java)
             intent.putExtra(Constants.user_details,currentUser)
             startActivityForResult(intent, CREATE_POST_REQUEST_CODE)
@@ -51,10 +48,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
     private fun setupActionBar() {
 
-        setSupportActionBar(toolbar_main_activity)
-        toolbar_main_activity.setNavigationIcon(R.drawable.ham_c_2)
+        setSupportActionBar(binding.appBarMain.toolbarMainActivity)
+        binding.appBarMain.toolbarMainActivity.setNavigationIcon(R.drawable.ham_c_2)
 
-        toolbar_main_activity.setNavigationOnClickListener {
+        binding.appBarMain.toolbarMainActivity.setNavigationOnClickListener {
             toggleDrawer()
         }
     }
@@ -64,15 +61,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      */
     private fun toggleDrawer() {
 
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            drawer_layout.openDrawer(GravityCompat.START)
+            binding.drawerLayout.openDrawer(GravityCompat.START)
         }
     }
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             // A double back press function is added in Base Activity.
             doubleBackToExit()
@@ -98,7 +95,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 finish()
             }
         }
-        drawer_layout.closeDrawer(GravityCompat.START)
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -123,7 +120,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         currentUser=user
         mUserName = user.name
 
-        val headerView = nav_view.getHeaderView(0)
+        val headerView = binding.navView.getHeaderView(0)
         val navUserImage = headerView.findViewById<ImageView>(R.id.iv_user_image)
         Glide
             .with(this@MainActivity)
@@ -140,13 +137,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         hideProgressDialog()
         if(posts.size>0){
             currentPosts=posts
-            rv_posts.visibility= View.VISIBLE
-            txt_noposts.visibility = View.GONE
+            binding.appBarMain.contentMain.rvPosts.visibility= View.VISIBLE
+            binding.appBarMain.contentMain.txtNoposts.visibility = View.GONE
 
-            rv_posts.layoutManager=LinearLayoutManager(this@MainActivity)
-            rv_posts.setHasFixedSize(true)
+            binding.appBarMain.contentMain.rvPosts.layoutManager=LinearLayoutManager(this@MainActivity)
+            binding.appBarMain.contentMain.rvPosts.setHasFixedSize(true)
             val adapter = PostAdapter(this@MainActivity,posts)
-            rv_posts.adapter=adapter
+            binding.appBarMain.contentMain.rvPosts.adapter=adapter
             adapter.setOnClickListener(object:
             PostAdapter.OnClickListener{
                 override fun onClick(position: Int, post: Post,view : ImageView,view2 : TextView) {
@@ -175,8 +172,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             })
 
         }else{
-            rv_posts.visibility= View.GONE
-            txt_noposts.visibility = View.VISIBLE
+            binding.appBarMain.contentMain.rvPosts.visibility= View.GONE
+            binding.appBarMain.contentMain.txtNoposts.visibility = View.VISIBLE
         }
     }
     fun postUpdateSuccess(){
