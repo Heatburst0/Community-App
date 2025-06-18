@@ -2,12 +2,15 @@ package com.kv.ablecommunity
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.ContextMenu
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.GravityCompat
@@ -15,6 +18,8 @@ import androidx.core.view.get
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.kv.ablecommunity.adapter.PostAdapter
@@ -169,6 +174,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     FirestoreClass().updatePosts(this@MainActivity,post)
                 }
 
+                override fun onShowComments(
+                    position: Int,
+                    post: Post
+                ) {
+                    showCommentsDialog()
+                }
+
             })
 
         }else{
@@ -211,6 +223,35 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     fun removePostSuccess(){
         hideProgressDialog()
         Toast.makeText(this,"Post removed Successfully!!",Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showCommentsDialog(){
+        val dialog = BottomSheetDialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.comments_view, null)
+        view.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+
+        dialog.setOnShowListener {
+            val bottomSheet = (dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)) as FrameLayout
+            bottomSheet.setBackgroundColor(Color.TRANSPARENT)
+            bottomSheet.let {
+                // Make bottom sheet height match parent
+                val layoutParams = it.layoutParams
+                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                it.layoutParams = layoutParams
+
+                // Expand and make draggable
+                val behavior = BottomSheetBehavior.from(it)
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                behavior.skipCollapsed = true
+                behavior.isDraggable = true
+            }
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
     }
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11

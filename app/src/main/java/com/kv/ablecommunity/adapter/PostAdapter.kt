@@ -2,6 +2,7 @@ package com.kv.ablecommunity.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.Image
 import android.net.Uri
 import android.text.format.DateUtils
@@ -9,13 +10,16 @@ import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kv.ablecommunity.MainActivity
 import com.kv.ablecommunity.R
 import com.kv.ablecommunity.firebase.FirestoreClass
@@ -54,6 +58,13 @@ open class PostAdapter (private val context: Context,
             if(likes>0){
                 holder.itemView.findViewById<TextView>(R.id.like_no).text = likes.toString()
             }
+            if(creator.id == FirestoreClass().getCurrentUserID()){
+                holder.itemView.findViewById<AppCompatButton>(R.id.followBtn).visibility = View.GONE
+                holder.itemView.findViewById<ImageView>(R.id.more_opt).visibility = View.VISIBLE
+            }else{
+                holder.itemView.findViewById<AppCompatButton>(R.id.followBtn).visibility = View.VISIBLE
+                holder.itemView.findViewById<ImageView>(R.id.more_opt).visibility = View.GONE
+            }
             holder.itemView.findViewById<TextView>(R.id.post_title).text=post.title
             holder.itemView.findViewById<TextView>(R.id.post_content).text=post.content
             val time= DateUtils.getRelativeTimeSpanString(post.timestamp.toLong()).toString()
@@ -72,9 +83,17 @@ open class PostAdapter (private val context: Context,
             holder.itemView.findViewById<ImageView>(R.id.more_opt).setOnClickListener {
                 (context as MainActivity).postMenu(position,holder.itemView.findViewById<ImageView>(R.id.more_opt))
             }
+            val imageContainer = holder.itemView.findViewById<LinearLayout>(R.id.image_container)
+            imageContainer.removeAllViews()
+            imageContainer.visibility = View.GONE
             if(post.images.isNotEmpty()){
                 val imageUris = post.images.map { Uri.parse(it) }
-                bindImages(context,holder.itemView.findViewById<LinearLayout>(R.id.image_container),imageUris)
+                bindImages(context,imageContainer,imageUris)
+            }
+            holder.itemView.findViewById<LinearLayout>(R.id.comments_iv).setOnClickListener {
+                if (onClickListener != null) {
+                    onClickListener!!.onShowComments(position, post)
+                }
             }
         }
     }
@@ -87,6 +106,7 @@ open class PostAdapter (private val context: Context,
     }
     interface OnClickListener {
         fun onClick(position: Int, post : Post,view : ImageView,view2 : TextView)
+        fun onShowComments(position: Int, post : Post)
     }
     private inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnLongClickListener{
         init {
