@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace 'com.kv.ablecommunity'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.kv.ablecommunity"
         minSdk 23
-        targetSdk 34
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
@@ -54,6 +54,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     // Image loading library
     implementation 'com.github.bumptech.glide:glide:4.16.0'
+    implementation 'androidx.activity:activity:1.10.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     //Notification feature
     implementation "com.google.firebase:firebase-messaging:24.1.1"

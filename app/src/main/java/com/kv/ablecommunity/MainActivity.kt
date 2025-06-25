@@ -1,8 +1,10 @@
 package com.kv.ablecommunity
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,20 +13,29 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.toColorInt
 import androidx.core.view.GravityCompat
 import androidx.core.view.get
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.kv.ablecommunity.adapter.CommentAdapter
 import com.kv.ablecommunity.adapter.PostAdapter
 import com.kv.ablecommunity.databinding.ActivityMainBinding
 import com.kv.ablecommunity.firebase.FirestoreClass
+import com.kv.ablecommunity.models.Comment
 import com.kv.ablecommunity.models.Post
 import com.kv.ablecommunity.models.User
 import com.kv.ablecommunity.utils.Constants
@@ -35,6 +46,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private lateinit var currentUser : User
     private lateinit var currentPosts : ArrayList<Post>
     private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -45,11 +57,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding.navView.setNavigationItemSelectedListener(this)
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().loadUserData(this@MainActivity)
+
         binding.appBarMain.createPost.setOnClickListener {
             val intent = Intent(this@MainActivity,CreatePostActivity::class.java)
             intent.putExtra(Constants.user_details,currentUser)
             startActivityForResult(intent, CREATE_POST_REQUEST_CODE)
         }
+
     }
     private fun setupActionBar() {
 
@@ -98,6 +112,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 finish()
+            }
+            R.id.myFollowers->{
+                val intent = Intent(this,FollowersActivity::class.java)
+                intent.putExtra("user",currentUser)
+                startActivity(intent)
             }
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -178,7 +197,23 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     position: Int,
                     post: Post
                 ) {
-                    showCommentsDialog()
+                    showCommentsDialog(post)
+                }
+
+                override fun onPressFollowbtn(
+                    position: Int,
+                    post: Post,
+                    followbtn: AppCompatButton
+                ) {
+                    if(!currentUser.following.contains(post.users[0].id)){
+                        followbtn.text = "Following"
+                        followbtn.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_check,0,0,0)
+                        followbtn.setTextColor(Color.WHITE)
+                        followbtn.background =
+                            ColorDrawable(ContextCompat.getColor(this@MainActivity,R.color.button_primary))
+
+
+                    }
                 }
 
             })
@@ -197,19 +232,73 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     /** Context Menu Trial**/
 
 
-    fun postMenu(pos : Int,view : ImageView){
+    fun postMenu(pos : Int,view : ImageView,menu : Int,post : Post){
         val popmenu = PopupMenu(this,view)
-        popmenu.inflate(R.menu.menu_post)
+        popmenu.inflate(menu)
+        val followedUserId = post.users[0].id
+        val isFollowing = currentUser.following.contains(followedUserId)
+        if(isFollowing){
+            val followItem = popmenu.menu.findItem(R.id.follow_user_btn)
+            followItem.title = "Following"
+            followItem.setIcon(R.drawable.ic_check)
+        }
+
+        try {
+            val fields = popmenu.javaClass.declaredFields
+            for (field in fields) {
+                if (field.name == "mPopup") {
+                    field.isAccessible = true
+                    val menuPopupHelper = field.get(popmenu)
+                    val classPopupHelper = Class.forName(menuPopupHelper.javaClass.name)
+                    val setForceIcons = classPopupHelper.getMethod("setForceShowIcon", Boolean::class.java)
+                    setForceIcons.invoke(menuPopupHelper, true)
+                    break
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         popmenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener{
             override fun onMenuItemClick(item: MenuItem?): Boolean {
                 when(item?.itemId){
 
                     R.id.delete_post_btn->{
-                        showProgressDialog(resources.getString(R.string.please_wait))
-                        FirestoreClass().removePost(this@MainActivity,currentPosts[pos].documentId)
+                        showErrorDialog("Are you sure you want to delete this post?","Yes","No") {
+                            showProgressDialog(resources.getString(R.string.please_wait))
+                            FirestoreClass().removePost(this@MainActivity,currentPosts[pos].documentId)
+                        }
                     }
                     R.id.edit_post->{
                         Toast.makeText(this@MainActivity,"Clicked",Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.follow_user_btn->{
+                        if(!isFollowing){
+                            currentUser.following.add(followedUserId)
+                            val userHashMap : HashMap<String,Any> = HashMap()
+                            userHashMap[Constants.following] = currentUser.following
+                            FirestoreClass().addfollowing(this@MainActivity,userHashMap)
+                            item.title = "Following"
+                            item.setIcon(R.drawable.ic_check)
+                        }else{
+                            showErrorDialog("Are you sure you want to unfollow?","Yes","No") {
+                                currentUser.following.remove(followedUserId)
+                                val userHashMap: HashMap<String, Any> = HashMap()
+                                userHashMap[Constants.following] = currentUser.following
+                                FirestoreClass().addfollowing(this@MainActivity, userHashMap)
+                                item.title = "Follow"
+                                item.setIcon(R.drawable.ic_add)
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "You have unfollowed",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+
+                        }
+                    }
+                    R.id.report_user_btn->{
+                        Toast.makeText(this@MainActivity,"Clicked report",Toast.LENGTH_SHORT).show()
                     }
                 }
                 return true
@@ -220,20 +309,41 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         popmenu.show()
 
     }
+
     fun removePostSuccess(){
         hideProgressDialog()
         Toast.makeText(this,"Post removed Successfully!!",Toast.LENGTH_SHORT).show()
     }
+    private fun showErrorDialog(warningtext : String,confirmText : String,denyText : String,confirmResponse : ()->Unit){
+        val dialog = Dialog(this)
 
-    private fun showCommentsDialog(){
+        dialog.setContentView(R.layout.error_dialog_layout)
+        dialog.findViewById<TextView>(R.id.warningText).text = warningtext
+        dialog.findViewById<TextView>(R.id.confirmText).text = confirmText
+        dialog.findViewById<TextView>(R.id.denyText).text = denyText
+        dialog.findViewById<TextView>(R.id.confirmText).setOnClickListener {
+            confirmResponse()
+            dialog.dismiss()
+        }
+        dialog.findViewById<TextView>(R.id.denyText).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+
+
+    }
+
+    private fun showCommentsDialog(post : Post){
         val dialog = BottomSheetDialog(this)
         val view = LayoutInflater.from(this).inflate(R.layout.comments_view, null)
         view.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
-
+        //for fixing views when keyboard appears
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         dialog.setOnShowListener {
+            //for updating parent view of bottomsheetlayout
             val bottomSheet = (dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)) as FrameLayout
             bottomSheet.setBackgroundColor(Color.TRANSPARENT)
             bottomSheet.let {
@@ -249,8 +359,23 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 behavior.isDraggable = true
             }
         }
-
         dialog.setContentView(view)
+        if(post.comments.isNotEmpty()){
+            val adapter = CommentAdapter(this,post.comments)
+            dialog.findViewById<RecyclerView>(R.id.commentsRv)!!.layoutManager = LinearLayoutManager(this)
+            dialog.findViewById<RecyclerView>(R.id.commentsRv)!!.adapter = adapter
+            dialog.findViewById<TextView>(R.id.noCommentsText)!!.visibility = View.GONE
+        }
+        dialog.findViewById<ImageView>(R.id.submitComment)!!.setOnClickListener {
+            val comment = dialog.findViewById<EditText>(R.id.etComment)!!.text.toString()
+            if(comment.isNotBlank()){
+                showProgressDialog(resources.getString(R.string.please_wait))
+                val commentObj= Comment(comment,currentUser,System.currentTimeMillis().toString())
+                post.comments.add(commentObj)
+                FirestoreClass().addComment(this,post)
+                dialog.dismiss()
+            }
+        }
         dialog.show()
     }
     companion object {

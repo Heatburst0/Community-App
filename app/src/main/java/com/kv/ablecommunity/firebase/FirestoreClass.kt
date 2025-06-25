@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.kv.ablecommunity.*
+import com.kv.ablecommunity.models.Comment
 import com.kv.ablecommunity.models.Post
 import com.kv.ablecommunity.models.User
 import com.kv.ablecommunity.utils.Constants
@@ -151,6 +152,65 @@ class FirestoreClass {
             .delete()
             .addOnSuccessListener {
                 activity.removePostSuccess()
+            }
+
+    }
+
+    //TODO change this method to a generic user update method
+
+    fun addComment(activity : MainActivity,post : Post){
+        val hm : HashMap<String,Any> = HashMap()
+        hm[Constants.COMMENT] = post.comments
+        mFireStore.collection(Constants.POSTS)
+            .document(post.documentId)
+            .update(hm)
+            .addOnSuccessListener {
+                activity.hideProgressDialog()
+                Toast.makeText(activity,"Comment Uploaded successfully",Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
+                Toast.makeText(activity,"Failed to upload comment",Toast.LENGTH_SHORT).show()
+            }
+    }
+    fun addfollowing(activity: MainActivity,userHashMap: HashMap<String, Any>){
+        mFireStore.collection(Constants.USERS)
+            .document(getCurrentUserID())
+            .update(userHashMap)
+            .addOnSuccessListener {
+//                Log.e(activity.javaClass.simpleName, "Profile Data updated successfully!")
+
+                Toast.makeText(activity, "You are following!", Toast.LENGTH_SHORT).show()
+
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while following.",
+                    e
+                )
+            }
+    }
+    fun getfollowings(fragment: FollowingFragment,user : User){
+        val followersID = user.following
+        mFireStore.collection(Constants.USERS)
+            .whereIn("id",followersID)
+            .get()
+            .addOnSuccessListener {
+                val followers : ArrayList<User> = ArrayList()
+                for(i in it.documents){
+                    val follower = i.toObject(User::class.java)!!
+                    followers.add(follower)
+                }
+                fragment.onGettingFollowingSuccess(followers)
+            }
+            .addOnFailureListener { e ->
+                Log.e(
+                    fragment.javaClass.simpleName,
+                    "Error following",
+                    e
+                )
             }
 
     }

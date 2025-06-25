@@ -9,6 +9,8 @@ data class User(
     val email: String = "",
     val image: String = "",
     val mobile: Long = 0,
+    val following : ArrayList<String> = ArrayList(),
+    val followers : ArrayList<String> = ArrayList()
 ) : Parcelable {
     constructor(source: Parcel) : this(
         source.readString()!!,
@@ -16,6 +18,8 @@ data class User(
         source.readString()!!,
         source.readString()!!,
         source.readLong(),
+        source.createStringArrayList()!!,
+        source.createStringArrayList()!!
 //        source.readBoolean()
     )
 
@@ -27,6 +31,8 @@ data class User(
         writeString(email)
         writeString(image)
         writeLong(mobile)
+        writeStringList(following)
+        writeStringList(followers)
 //        writeBoolean(Selected)
     }
 

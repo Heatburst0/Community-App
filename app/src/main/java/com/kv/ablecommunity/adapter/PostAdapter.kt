@@ -3,6 +3,7 @@ package com.kv.ablecommunity.adapter
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.media.Image
 import android.net.Uri
 import android.text.format.DateUtils
@@ -15,6 +16,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +27,8 @@ import com.kv.ablecommunity.R
 import com.kv.ablecommunity.firebase.FirestoreClass
 import com.kv.ablecommunity.models.Post
 import de.hdodenhof.circleimageview.CircleImageView
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.toColorInt
 
 
 open class PostAdapter (private val context: Context,
@@ -58,20 +62,11 @@ open class PostAdapter (private val context: Context,
             if(likes>0){
                 holder.itemView.findViewById<TextView>(R.id.like_no).text = likes.toString()
             }
-            if(creator.id == FirestoreClass().getCurrentUserID()){
-                holder.itemView.findViewById<AppCompatButton>(R.id.followBtn).visibility = View.GONE
-                holder.itemView.findViewById<ImageView>(R.id.more_opt).visibility = View.VISIBLE
-            }else{
-                holder.itemView.findViewById<AppCompatButton>(R.id.followBtn).visibility = View.VISIBLE
-                holder.itemView.findViewById<ImageView>(R.id.more_opt).visibility = View.GONE
-            }
+
             holder.itemView.findViewById<TextView>(R.id.post_title).text=post.title
             holder.itemView.findViewById<TextView>(R.id.post_content).text=post.content
             val time= DateUtils.getRelativeTimeSpanString(post.timestamp.toLong()).toString()
             holder.itemView.findViewById<TextView>(R.id.timestamp_post).text=time
-            if(creator.name!=(context as MainActivity).mUserName){
-                holder.itemView.findViewById<ImageView>(R.id.more_opt).visibility = View.INVISIBLE
-            }
             if(post.likedby.contains(FirestoreClass().getCurrentUserID())){
                 holder.itemView.findViewById<ImageView>(R.id.like_iv).setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.ic_like_blue))
             }
@@ -81,7 +76,11 @@ open class PostAdapter (private val context: Context,
                 }
             }
             holder.itemView.findViewById<ImageView>(R.id.more_opt).setOnClickListener {
-                (context as MainActivity).postMenu(position,holder.itemView.findViewById<ImageView>(R.id.more_opt))
+                var menu : Int=0
+                menu = if(post.users[0].id==FirestoreClass().getCurrentUserID()){
+                    R.menu.menu_post
+                }else R.menu.menu_post2
+                (context as MainActivity).postMenu(position,holder.itemView.findViewById<ImageView>(R.id.more_opt),menu,post)
             }
             val imageContainer = holder.itemView.findViewById<LinearLayout>(R.id.image_container)
             imageContainer.removeAllViews()
@@ -95,6 +94,7 @@ open class PostAdapter (private val context: Context,
                     onClickListener!!.onShowComments(position, post)
                 }
             }
+
         }
     }
 
@@ -107,6 +107,7 @@ open class PostAdapter (private val context: Context,
     interface OnClickListener {
         fun onClick(position: Int, post : Post,view : ImageView,view2 : TextView)
         fun onShowComments(position: Int, post : Post)
+        fun onPressFollowbtn(position: Int, post : Post,followbtn: AppCompatButton)
     }
     private inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnLongClickListener{
         init {
@@ -129,9 +130,11 @@ open class PostAdapter (private val context: Context,
                 this.weight = weight
                 marginEnd = 6.dp(context)
                 topMargin = 6.dp(context)
+
             }
+            background = AppCompatResources.getDrawable(context, R.drawable.bg_basic_stroke)
             scaleType = ImageView.ScaleType.CENTER_CROP
-            setBackgroundColor(Color.LTGRAY) // Optional
+
         }
     }
 

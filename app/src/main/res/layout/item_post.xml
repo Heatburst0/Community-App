@@ -56,21 +56,9 @@
             android:layout_height="30dp"
             android:src="@drawable/ic_more"
             android:layout_weight="0.2"
-            android:visibility="gone"
-            />
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/followBtn"
-            android:layout_width="wrap_content"
-            android:minWidth="80dp"
-            android:layout_height="30dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="12dp"
-            android:text="Follow"
             android:visibility="visible"
-            android:textSize="12sp"
-            android:background="@drawable/bg_btn_stroke_blue"
-            android:textColor="@color/button_primary"
-            android:drawableStart="@drawable/ic_add"/>
+            />
+
 
 
 
@@ -106,6 +94,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:clipChildren="true"
+        android:clipToPadding="true"
         tools:visibility="visible"
         android:visibility="gone">
     </LinearLayout>

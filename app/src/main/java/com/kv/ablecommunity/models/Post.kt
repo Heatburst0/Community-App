@@ -13,6 +13,7 @@ data class Post(
     val likedby : ArrayList<String> = ArrayList(),
     var likes : Int =0,
     var images : ArrayList<String> = ArrayList(),
+    var comments : ArrayList<Comment> = ArrayList()
 
 
 
@@ -26,7 +27,8 @@ data class Post(
         source.readString()!!,
         source.createStringArrayList()!!,
         source.readInt(),
-        source.createStringArrayList()!!
+        source.createStringArrayList()!!,
+        source.createTypedArrayList(Comment.CREATOR)!!
 
     )
 

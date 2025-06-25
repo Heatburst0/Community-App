@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+        <item
+            android:icon="@drawable/ic_add"
+            android:id="@+id/follow_user_btn"
+            android:title="Follow"
+            />
+        <item
+
+            android:id="@+id/report_user_btn"
+            android:title="Report"
+            />
+
+
+
+    
+
+</menu>

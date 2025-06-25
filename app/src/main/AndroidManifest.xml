@@ -19,10 +19,14 @@
         android:theme="@style/Theme.AbleCommunity"
         tools:targetApi="31">
         <activity
+            android:name=".FollowersActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
             android:name=".CreatePostActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false"
