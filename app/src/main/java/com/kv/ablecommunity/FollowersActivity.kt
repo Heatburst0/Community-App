@@ -1,12 +1,15 @@
 package com.kv.ablecommunity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kv.ablecommunity.databinding.ActivityFollowersBinding
@@ -38,6 +41,11 @@ class FollowersActivity : AppCompatActivity() {
         TabLayoutMediator(binding.followTab, binding.vPager) { tab, position ->
             tab.text = tabTitles[position]
         }.attach()
+        setupUserProfile()
+        binding.currentUserLayout.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+            finish()
+        }
 
 
     }
@@ -53,5 +61,16 @@ class FollowersActivity : AppCompatActivity() {
         }
 
         binding.toolbarFollowersActivity.setNavigationOnClickListener { onBackPressed() }
+    }
+    private fun setupUserProfile(){
+        Glide
+            .with(this)
+            .load(currentUser.image)
+            .centerCrop()
+            .placeholder(R.drawable.ic_user_place_holder)
+            .into(findViewById(R.id.iv_follow_user_image))
+        findViewById<TextView>(R.id.follow_user_name).text = currentUser.name
+        findViewById<TextView>(R.id.follow_email).text = currentUser.email
+
     }
 }

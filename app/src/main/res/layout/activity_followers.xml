@@ -31,12 +31,13 @@
         app:cardCornerRadius="10dp"
         android:elevation="@dimen/card_view_elevation">
         <LinearLayout
+            android:id="@+id/currentUserLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:orientation="horizontal">
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_profile_user_image"
+                android:id="@+id/iv_follow_user_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:contentDescription="@string/image_contentDescription"
@@ -50,7 +51,7 @@
                 android:layout_marginStart="10dp"
                 >
                 <TextView
-                    android:id="@+id/post_user_name"
+                    android:id="@+id/follow_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="User Name"
@@ -58,7 +59,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/black"/>
                 <TextView
-                    android:id="@+id/timestamp_post"
+                    android:id="@+id/follow_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Posted on"

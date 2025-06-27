@@ -70,4 +70,23 @@ open class BaseActivity : AppCompatActivity() {
         Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
     }
 
+    fun showErrorDialog(context: Context,warningtext : String,confirmText : String,denyText : String,confirmResponse : ()->Unit){
+        val dialog = Dialog(context)
+
+        dialog.setContentView(R.layout.error_dialog_layout)
+        dialog.findViewById<TextView>(R.id.warningText).text = warningtext
+        dialog.findViewById<TextView>(R.id.confirmText).text = confirmText
+        dialog.findViewById<TextView>(R.id.denyText).text = denyText
+        dialog.findViewById<TextView>(R.id.confirmText).setOnClickListener {
+            confirmResponse()
+            dialog.dismiss()
+        }
+        dialog.findViewById<TextView>(R.id.denyText).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+
+
+    }
+
 }

@@ -28,7 +28,7 @@ class FollowingFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         currentUser = (activity as FollowersActivity).currentUser
-        FirestoreClass().getfollowings(this,currentUser)
+        FirestoreClass().getfollowings(this,currentUser,true)
 
         return binding.root
     }

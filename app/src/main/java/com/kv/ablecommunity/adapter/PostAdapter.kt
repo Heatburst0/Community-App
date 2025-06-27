@@ -61,15 +61,18 @@ open class PostAdapter (private val context: Context,
             val likes = post.likes
             if(likes>0){
                 holder.itemView.findViewById<TextView>(R.id.like_no).text = likes.toString()
+            }else
+                holder.itemView.findViewById<TextView>(R.id.like_no).text = "Like"
+            if(post.likedby.contains(FirestoreClass().getCurrentUserID())){
+                holder.itemView.findViewById<ImageView>(R.id.like_iv).setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.ic_like_blue))
+            }else{
+                holder.itemView.findViewById<ImageView>(R.id.like_iv).setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.ic_like))
             }
-
             holder.itemView.findViewById<TextView>(R.id.post_title).text=post.title
             holder.itemView.findViewById<TextView>(R.id.post_content).text=post.content
             val time= DateUtils.getRelativeTimeSpanString(post.timestamp.toLong()).toString()
             holder.itemView.findViewById<TextView>(R.id.timestamp_post).text=time
-            if(post.likedby.contains(FirestoreClass().getCurrentUserID())){
-                holder.itemView.findViewById<ImageView>(R.id.like_iv).setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.ic_like_blue))
-            }
+
             holder.itemView.findViewById<LinearLayout>(R.id.like_btn).setOnClickListener {
                 if (onClickListener != null) {
                     onClickListener!!.onClick(position, post,holder.itemView.findViewById<ImageView>(R.id.like_iv),holder.itemView.findViewById<TextView>(R.id.like_no))

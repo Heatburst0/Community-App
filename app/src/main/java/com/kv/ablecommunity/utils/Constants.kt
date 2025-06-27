@@ -7,6 +7,8 @@ import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 
 object Constants {
+
+
     const val USERS: String = "users"
     const val POSTS : String ="posts"
     const val user_details : String ="user_details"
@@ -31,6 +33,7 @@ object Constants {
     const val MOBILE: String = "mobile"
     const val COMMENT : String ="comments"
     const val following : String ="following"
+    const val followers : String ="followers"
     const val READ_STORAGE_PERMISSION_CODE = 1
     // A unique code of image selection from Phone Storage.
     const val PICK_IMAGE_REQUEST_CODE = 2

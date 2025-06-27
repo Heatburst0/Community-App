@@ -3,11 +3,12 @@ package com.kv.ablecommunity.firebase
 import android.app.Activity
 import android.util.Log
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.kv.ablecommunity.*
-import com.kv.ablecommunity.models.Comment
 import com.kv.ablecommunity.models.Post
 import com.kv.ablecommunity.models.User
 import com.kv.ablecommunity.utils.Constants
@@ -173,9 +174,11 @@ class FirestoreClass {
                 Toast.makeText(activity,"Failed to upload comment",Toast.LENGTH_SHORT).show()
             }
     }
-    fun addfollowing(activity: MainActivity,userHashMap: HashMap<String, Any>){
+    fun updateFollowing(activity: MainActivity, firstuser : User,seconduser : User){
+        val userHashMap : HashMap<String,Any> = HashMap()
+        userHashMap[Constants.following] = firstuser.following
         mFireStore.collection(Constants.USERS)
-            .document(getCurrentUserID())
+            .document(firstuser.id)
             .update(userHashMap)
             .addOnSuccessListener {
 //                Log.e(activity.javaClass.simpleName, "Profile Data updated successfully!")
@@ -191,9 +194,31 @@ class FirestoreClass {
                     e
                 )
             }
+        userHashMap.clear()
+        userHashMap[Constants.followers] = seconduser.followers
+        mFireStore.collection(Constants.USERS)
+            .document(seconduser.id)
+            .update(userHashMap)
+            .addOnSuccessListener {
+
+                Toast.makeText(activity, "You are following!", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while following.",
+                    e
+                )
+            }
     }
-    fun getfollowings(fragment: FollowingFragment,user : User){
-        val followersID = user.following
+    fun getfollowings(fragment: Fragment,user : User,flag : Boolean){
+        var followersID = if(flag) user.following else user.followers
+        if (followersID.isEmpty()) {
+            if(flag) (fragment as FollowingFragment).onGettingFollowingSuccess(ArrayList())
+            else (fragment as FollowersFragment).onGettingFollowingSuccess(ArrayList())
+            return
+        }
         mFireStore.collection(Constants.USERS)
             .whereIn("id",followersID)
             .get()
@@ -203,7 +228,8 @@ class FirestoreClass {
                     val follower = i.toObject(User::class.java)!!
                     followers.add(follower)
                 }
-                fragment.onGettingFollowingSuccess(followers)
+                if(flag) (fragment as FollowingFragment).onGettingFollowingSuccess(followers)
+                else (fragment as FollowersFragment).onGettingFollowingSuccess(followers)
             }
             .addOnFailureListener { e ->
                 Log.e(
@@ -213,6 +239,32 @@ class FirestoreClass {
                 )
             }
 
+    }
+
+    fun listenToPostsRealtime(activity: MainActivity) {
+        mFireStore.collection(Constants.POSTS)
+            .addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    Log.e("Firestore", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+
+                if (snapshots != null) {
+                    for (docChange in snapshots.documentChanges) {
+                        if (docChange.type == DocumentChange.Type.MODIFIED) {
+                            val updatedPost = docChange.document.toObject(Post::class.java).apply {
+                                documentId = docChange.document.id
+                            }
+
+                            val index = activity.currentPosts.indexOfFirst { it.documentId == updatedPost.documentId }
+                            if (index != -1) {
+                                activity.currentPosts[index] = updatedPost
+                                activity.postAdapter.notifyItemChanged(index)
+                            }
+                        }
+                    }
+                }
+            }
     }
 
 
