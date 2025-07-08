@@ -37,7 +37,7 @@ class FollowersFragment : Fragment() {
     fun onGettingFollowingSuccess(followers : ArrayList<User>){
         following.clear()
         following.addAll(followers)
-        val adapter = FollowersAdapter(requireContext(),following)
+        val adapter = FollowersAdapter(requireContext(),following,true)
         binding.rvFollowers.layoutManager = LinearLayoutManager(requireContext())
         binding.rvFollowers.adapter = adapter
     }

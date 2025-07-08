@@ -13,7 +13,8 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class FollowersAdapter(
     private val context : Context,
-    private val followers : ArrayList<User>
+    private val followers : ArrayList<User>,
+    private val followerIsTrue : Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -37,6 +38,11 @@ class FollowersAdapter(
         if(holder is MyViewHolder){
             holder.itemView.findViewById<TextView>(R.id.follow_user_name).text = follower.name
             holder.itemView.findViewById<TextView>(R.id.email_follow).text = follower.email
+            if(followerIsTrue){
+                holder.itemView.findViewById<TextView>(R.id.unfollowBtn).text = "Remove"
+            }else{
+                holder.itemView.findViewById<TextView>(R.id.unfollowBtn).text ="Unfollow"
+            }
             Glide
                 .with(context)
                 .load(follower.image)
