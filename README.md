@@ -25,5 +25,8 @@ Community App is a social media platform where users can create text and photo-b
 ## When you open the app for the first time
 
 ![intro_comm_final](https://github.com/user-attachments/assets/f444804e-57ed-4277-ad90-e81e324525db)
+
 <br />
+<br />
+
 When the app is opened for the first time, users are greeted with an intro screen offering two options — Sign In (for existing users) or Sign Up (for new users). New users can register using their name, email, and password. After successful sign-up, they are taken directly to the home screen. Returning users can log in anytime using their registered email and password.
