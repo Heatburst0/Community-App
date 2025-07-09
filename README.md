@@ -18,3 +18,10 @@ Community App is a social media platform where users can create text and photo-b
 -  In Android, the **XML** is used for designing User Interface and layouts, and it's a lightweight markup language that doesn't make layout heavy.
 
 <br />
+
+
+## When you open the app for the first time
+
+![intro_comm_final](https://github.com/user-attachments/assets/f444804e-57ed-4277-ad90-e81e324525db)
+
+
