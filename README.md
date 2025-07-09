@@ -19,6 +19,7 @@ Community App is a social media platform where users can create text and photo-b
 
 <br />
 <br />
+<br />
 
 ## When you open the app for the first time
 
